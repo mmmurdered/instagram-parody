@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -25,16 +27,10 @@ public class AuthenticationService {
 
     public AuthenticationResponse login(LoginForm loginForm){
 
-        //TODO troubles with this shit
-        try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
-        } catch (Exception e){
-            throw new RuntimeException(e.getMessage(), e.getCause());
-        }
 
         User user = userRepository.findUserByUsername(loginForm.getUsername()).orElseThrow();
-        System.out.println("User:" + user);
 
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
@@ -47,6 +43,10 @@ public class AuthenticationService {
                 .username(userDTO.getUsername())
                 .email(userDTO.getEmail())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
+                .followers(new ArrayList<>())
+                .userPosts(new ArrayList<>())
+                .likedPosts(new ArrayList<>())
+                .follows(new ArrayList<>())
                 .build();
         userRepository.save(user);
 

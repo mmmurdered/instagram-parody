@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,6 +26,14 @@ public class User implements UserDetails {
     private String email;
 
     private String role;
+
+    private List<Post> userPosts;
+
+    private List<User> followers;
+
+    private List<User> follows;
+
+    private List<Post> likedPosts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
