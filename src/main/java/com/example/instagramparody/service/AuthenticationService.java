@@ -24,9 +24,14 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse login(LoginForm loginForm){
+
         //TODO troubles with this shit
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
 
         User user = userRepository.findUserByUsername(loginForm.getUsername()).orElseThrow();
         System.out.println("User:" + user);
